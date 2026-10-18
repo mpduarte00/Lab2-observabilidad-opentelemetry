@@ -1,0 +1,54 @@
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+*.tfvars
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Keep Terraform dependency lock files versioned
+# .terraform.lock.hcl should NOT be ignored
+
+# macOS
+.DS_Store
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# SQLite databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Test reports
+junit.xml
+pytest-report.xml
+
+# Binarios descargados de Istio
+istio-1.31.2/

@@ -1,2 +1,1 @@
-# Lab2-observabilidad-opentelemetry
-Laboratorio final
+# Lab1-observabilidad-opentelemetry
