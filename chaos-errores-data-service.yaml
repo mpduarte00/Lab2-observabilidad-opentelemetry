@@ -1,0 +1,20 @@
+
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: data-service-error-test
+  namespace: default
+spec:
+  hosts:
+    - data-service
+  http:
+    - fault:
+        abort:
+          percentage:
+            value: 10
+          httpStatus: 500
+      route:
+        - destination:
+            host: data-service
+            port:
+              number: 8003

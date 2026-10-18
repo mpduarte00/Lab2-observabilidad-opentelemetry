@@ -1,0 +1,21 @@
+
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: service-b-latency-test
+  namespace: default
+spec:
+  hosts:
+    - service-b
+  http:
+    - fault:
+        delay:
+          percentage:
+            value: 100
+          fixedDelay: 200ms
+      route:
+        - destination:
+            host: service-b
+            port:
+              number: 8002
+

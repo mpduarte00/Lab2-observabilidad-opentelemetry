@@ -1,0 +1,75 @@
+
+groups:
+  - name: observabilidad-servicios
+    rules:
+      - alert: AltaLatenciaServiceA
+        expr: |
+          histogram_quantile(
+            0.95,
+            sum by (le) (
+              rate(http_server_duration_milliseconds_bucket[5m])
+            )
+          ) > 200
+        for: 2m
+        labels:
+          severity: warning
+          service: service-a
+        annotations:
+          summary: "Latencia P95 alta en service-a"
+          description: "La latencia P95 de service-a supera los 200 ms durante 2 minutos."
+
+      - alert: AltaTasaErroresHTTP
+        expr: |
+          (
+            100 *
+            sum(rate(http_server_duration_milliseconds_count{http_status_code=~"5.."}[5m]))
+            /
+            sum(rate(http_server_duration_milliseconds_count[5m]))
+          ) > 5
+        for: 2m
+        labels:
+          severity: critical
+          service: service-a
+        annotations:
+          summary: "Tasa de errores HTTP elevada"
+          description: "Más del 5% de las solicitudes HTTP presentan errores 5xx durante 2 minutos."
+
+      - alert: AltaLatenciaP99ServiceB
+        expr: |
+          histogram_quantile(
+            0.99,
+            sum by (le) (
+              rate(service_b_request_duration_ms_milliseconds_bucket[5m])
+            )
+          ) > 200
+        for: 2m
+        labels:
+          severity: warning
+          service: service-b
+        annotations:
+          summary: "Latencia P99 alta en service-b"
+          description: "La latencia P99 de service-b supera los 200 ms durante 2 minutos."
+
+      - alert: AnomaliaCorrelacionadaServiceA
+        expr: |
+          (
+            100 *
+            sum(rate(http_server_duration_milliseconds_count{http_status_code=~"5.."}[5m]))
+            /
+            sum(rate(http_server_duration_milliseconds_count[5m]))
+          ) > 5
+          and
+          histogram_quantile(
+            0.99,
+            sum by (le) (
+              rate(http_server_duration_milliseconds_bucket[5m])
+            )
+          ) > 200
+        for: 2m
+        labels:
+          severity: critical
+          service: service-a
+          category: correlated-anomaly
+        annotations:
+          summary: "Anomalía correlacionada en service-a"
+          description: "La tasa de errores 5xx supera el 5% y la latencia P99 supera los 200 ms durante 2 minutos."
